@@ -17,12 +17,14 @@ package com.example.restservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -41,23 +44,57 @@ public class ArticleControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    private void setup(){
+    private void setup() {
         ArticleRepository.items = new ArrayList<>();
     }
 
-    @Test
-    public void createArticle() throws Exception {
-        //given
-        Map<String, String> params = valildParams();
-        //when
-        post("/articles", params);
-        //then
-        assertEquals(1, ArticleRepository.items.size());
-        assertEquals("I love beer.", ArticleRepository.items.get(0).title);
-        assertEquals("it's great.", ArticleRepository.items.get(0).body);
+    @Nested
+    class CreateAPI {
+        @Nested
+        class Success {
+            @Test
+            public void createArticle() throws Exception {
+                //given
+                Map<String, String> params = validParams();
+                //when
+                ResultActions response = post("/articles", params);
+                //then
+                response.andExpect(jsonPath("$.status").value("success"));
+                assertEquals(1, ArticleRepository.items.size());
+                assertEquals("I love beer.", ArticleRepository.items.get(0).title);
+                assertEquals("it's great.", ArticleRepository.items.get(0).body);
+            }
+        }
+
+        @Nested
+        class Invalid {
+            @Test
+            public void titleTooLong() throws Exception {
+                //given
+                Map<String, String> params = validParams();
+                params.put("title", "a".repeat(21));
+                //when
+                ResultActions response = post("/articles", params);
+                //then
+                response.andExpect(jsonPath("$.status").value("error"));
+                assertEquals(0, ArticleRepository.items.size());
+            }
+
+            @Test
+            public void bodyTooLong() throws Exception {
+                //given
+                Map<String, String> params = validParams();
+                params.put("body", "a".repeat(101));
+                //when
+                ResultActions response = post("/articles", params);
+                //then
+                response.andExpect(jsonPath("$.status").value("error"));
+                assertEquals(0, ArticleRepository.items.size());
+            }
+        }
     }
 
-    private Map<String, String> valildParams() {
+    private Map<String, String> validParams() {
         Map<String, String> params = new HashMap<>() {{
             put("title", "I love beer.");
             put("body", "it's great.");
@@ -65,13 +102,14 @@ public class ArticleControllerTest {
         return params;
     }
 
-    private void post(String url, Map<String, String> params) throws Exception {
+    private ResultActions post(String url, Map<String, String> params) throws Exception {
         var objectMapper = new ObjectMapper();
-        this.mockMvc.perform(
-                        MockMvcRequestBuilders.post(url)
-                                .content(objectMapper.writeValueAsString(params))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
+        ResultActions perform = this.mockMvc.perform(
+                MockMvcRequestBuilders.post(url)
+                        .content(objectMapper.writeValueAsString(params))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE));
+        perform.andExpect(status().isOk());
+        return perform;
     }
 
 //    @Test

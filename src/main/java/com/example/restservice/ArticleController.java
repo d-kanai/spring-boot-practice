@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
     @PostMapping("/articles")
-    public String create(@RequestBody Article article) {
+    public Response create(@RequestBody Article article) {
+        if (article.title.length() > 20) {
+            return new Response("error");
+        }
+        if (article.body.length() > 100) {
+            return new Response("error");
+        }
         new ArticleRepository().create(article);
-        return "hello";
+        return new Response("success");
     }
 
 }
