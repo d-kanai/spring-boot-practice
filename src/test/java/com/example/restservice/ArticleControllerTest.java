@@ -103,7 +103,7 @@ public class ArticleControllerTest {
             ArticleRepository.items = new ArrayList<>();
             ArticleRepository.items.add(new Article("I love beer.", "It's great."));
             //when
-            ResultActions response = get();
+            ResultActions response = get("/articles");
             //then
             response.andExpect(jsonPath("$.[0].title").value("I love beer."));
             response.andExpect(jsonPath("$.[0].body").value("It's great."));
@@ -120,10 +120,8 @@ public class ArticleControllerTest {
         return params;
     }
 
-    private ResultActions get() throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/articles")
-                        .param("name", "Spring Community"))
-                .andDo(print());
+    private ResultActions get(String url) throws Exception {
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(url)).andDo(print());
         resultActions.andExpect(status().isOk());
         return resultActions;
     }
