@@ -9,4 +9,8 @@ public class ArticleRepository {
     public void create(Article article) {
         items.add(article);
     }
+
+    public List<Article> search() {
+        return items;
+    }
 }

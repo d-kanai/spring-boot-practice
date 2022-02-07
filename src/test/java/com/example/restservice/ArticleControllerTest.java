@@ -32,7 +32,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,8 +62,8 @@ public class ArticleControllerTest {
                 //then
                 response.andExpect(jsonPath("$.status").value("success"));
                 assertEquals(1, ArticleRepository.items.size());
-                assertEquals("I love beer.", ArticleRepository.items.get(0).title);
-                assertEquals("it's great.", ArticleRepository.items.get(0).body);
+                assertEquals("I love beer.", ArticleRepository.items.get(0).title());
+                assertEquals("it's great.", ArticleRepository.items.get(0).body());
             }
         }
 
@@ -94,12 +95,37 @@ public class ArticleControllerTest {
         }
     }
 
+    @Nested
+    class SearchAPI {
+        @Test
+        public void searchAll() throws Exception {
+            //given
+            ArticleRepository.items = new ArrayList<>();
+            ArticleRepository.items.add(new Article("I love beer.", "It's great."));
+            //when
+            ResultActions response = get();
+            //then
+            response.andExpect(jsonPath("$.[0].title").value("I love beer."));
+            response.andExpect(jsonPath("$.[0].body").value("It's great."));
+        }
+
+
+    }
+
     private Map<String, String> validParams() {
         Map<String, String> params = new HashMap<>() {{
             put("title", "I love beer.");
             put("body", "it's great.");
         }};
         return params;
+    }
+
+    private ResultActions get() throws Exception {
+        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/articles")
+                        .param("name", "Spring Community"))
+                .andDo(print());
+        resultActions.andExpect(status().isOk());
+        return resultActions;
     }
 
     private ResultActions post(String url, Map<String, String> params) throws Exception {
@@ -112,12 +138,5 @@ public class ArticleControllerTest {
         return perform;
     }
 
-//    @Test
-//    public void paramGreetingShouldReturnTailoredMessage() throws Exception {
-//        this.mockMvc.perform(get("/greeting").param("name", "Spring Community"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content").value("Hello, Spring Community!"));
-//    }
 
 }
