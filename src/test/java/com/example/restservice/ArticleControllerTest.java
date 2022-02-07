@@ -15,27 +15,23 @@
  */
 package com.example.restservice;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,23 +40,38 @@ public class ArticleControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @BeforeEach
+    private void setup(){
+        ArticleRepository.items = new ArrayList<>();
+    }
+
     @Test
     public void createArticle() throws Exception {
         //given
-        ArticleRepository.items = new ArrayList<>();
-        Map<String, String> params = new HashMap<>() {{
-            put("title", "I love beer.");
-        }};
+        Map<String, String> params = valildParams();
         //when
-        var objectMapper = new ObjectMapper();
-        this.mockMvc.perform(
-                        post("/articles")
-                                .content(objectMapper.writeValueAsString(params))
-                                .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk());
+        post("/articles", params);
         //then
         assertEquals(1, ArticleRepository.items.size());
         assertEquals("I love beer.", ArticleRepository.items.get(0).title);
+        assertEquals("it's great.", ArticleRepository.items.get(0).body);
+    }
+
+    private Map<String, String> valildParams() {
+        Map<String, String> params = new HashMap<>() {{
+            put("title", "I love beer.");
+            put("body", "it's great.");
+        }};
+        return params;
+    }
+
+    private void post(String url, Map<String, String> params) throws Exception {
+        var objectMapper = new ObjectMapper();
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.post(url)
+                                .content(objectMapper.writeValueAsString(params))
+                                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk());
     }
 
 //    @Test
