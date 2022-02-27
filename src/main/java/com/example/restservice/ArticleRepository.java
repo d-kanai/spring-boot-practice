@@ -1,16 +1,6 @@
 package com.example.restservice;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public class ArticleRepository {
-    public static List<Article> items = new ArrayList<>();
-
-    public void create(Article article) {
-        items.add(article);
-    }
-
-    public List<Article> search() {
-        return items;
-    }
+public interface ArticleRepository extends JpaRepository<Article, Integer> {
 }

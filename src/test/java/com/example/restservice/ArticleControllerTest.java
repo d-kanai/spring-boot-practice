@@ -1,18 +1,3 @@
-/*
- * Copyright 2016 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *	  https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.restservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,12 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,9 +27,12 @@ public class ArticleControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    ArticleRepository articleRepository;
+
     @BeforeEach
     private void setup() {
-        ArticleRepository.items = new ArrayList<>();
+        articleRepository.deleteAll();
     }
 
     @Nested
@@ -61,9 +47,9 @@ public class ArticleControllerTest {
                 ResultActions response = post("/articles", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("success"));
-                assertEquals(1, ArticleRepository.items.size());
-                assertEquals("I love beer.", ArticleRepository.items.get(0).title());
-                assertEquals("it's great.", ArticleRepository.items.get(0).body());
+                assertEquals(1, articleRepository.count());
+                assertEquals("I love beer.", articleRepository.findAll().get(0).getTitle());
+                assertEquals("it's great.", articleRepository.findAll().get(0).getBody());
             }
         }
 
@@ -78,7 +64,7 @@ public class ArticleControllerTest {
                 ResultActions response = post("/articles", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("error"));
-                assertEquals(0, ArticleRepository.items.size());
+                assertEquals(0, articleRepository.count());
             }
 
             @Test
@@ -90,7 +76,7 @@ public class ArticleControllerTest {
                 ResultActions response = post("/articles", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("error"));
-                assertEquals(0, ArticleRepository.items.size());
+                assertEquals(0, articleRepository.count());
             }
         }
     }
@@ -100,16 +86,13 @@ public class ArticleControllerTest {
         @Test
         public void searchAll() throws Exception {
             //given
-            ArticleRepository.items = new ArrayList<>();
-            ArticleRepository.items.add(new Article("I love beer.", "It's great."));
+            articleRepository.save(new Article("I love beer.", "It's great."));
             //when
             ResultActions response = get("/articles");
             //then
             response.andExpect(jsonPath("$.[0].title").value("I love beer."));
             response.andExpect(jsonPath("$.[0].body").value("It's great."));
         }
-
-
     }
 
     private Map<String, String> validParams() {
