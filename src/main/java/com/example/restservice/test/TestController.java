@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+//@IMPROVE: use only test env. test db by docker-compose
+
 @RestController
 public class TestController {
 
     @Autowired
     DoDRepository dodRepository;
 
+    //@IMPROVE: set CORS by config
     @CrossOrigin(origins = {"*"})
     @PostMapping("/test/reset")
     public Response deleteAll() {

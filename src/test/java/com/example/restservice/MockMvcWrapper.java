@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class MockMvcWrapper {
 
-
+    //@IMPROVE: remove mockMvc args
     public ResultActions get(MockMvc mockMvc, String url) throws Exception {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get(url)).andDo(print());
         resultActions.andExpect(status().isOk());
