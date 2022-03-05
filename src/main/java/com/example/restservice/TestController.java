@@ -13,6 +13,14 @@ public class TestController {
     DoDRepository dodRepository;
 
     @CrossOrigin(origins = {"*"})
+    @PostMapping("/test/reset")
+    public Response deleteAll() {
+        dodRepository.deleteAll();
+        return new Response("success");
+    }
+
+
+    @CrossOrigin(origins = {"*"})
     @PostMapping("/test/dod")
     public Response createDoD(@RequestBody DoD dod) {
         dodRepository.save(dod);
