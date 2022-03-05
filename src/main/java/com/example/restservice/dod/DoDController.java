@@ -1,4 +1,4 @@
-package com.example.restservice;
+package com.example.restservice.dod;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

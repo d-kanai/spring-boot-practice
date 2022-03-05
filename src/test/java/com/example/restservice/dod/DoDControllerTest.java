@@ -1,5 +1,8 @@
-package com.example.restservice;
+package com.example.restservice.dod;
 
+import com.example.restservice.MockMvcWrapper;
+import com.example.restservice.dod.DoD;
+import com.example.restservice.dod.DoDRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
