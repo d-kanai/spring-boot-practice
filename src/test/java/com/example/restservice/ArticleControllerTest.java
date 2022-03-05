@@ -26,6 +26,7 @@ public class ArticleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private MockMvcWrapper http = new MockMvcWrapper();
 
     @Autowired
     ArticleRepository articleRepository;
@@ -44,7 +45,7 @@ public class ArticleControllerTest {
                 //given
                 Map<String, String> params = validParams();
                 //when
-                ResultActions response = post("/articles", params);
+                ResultActions response = http.post(mockMvc, "/articles", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("success"));
                 assertEquals(1, articleRepository.count());
@@ -61,7 +62,7 @@ public class ArticleControllerTest {
                 Map<String, String> params = validParams();
                 params.put("title", "a".repeat(21));
                 //when
-                ResultActions response = post("/articles", params);
+                ResultActions response = http.post(mockMvc, "/articles", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("error"));
                 assertEquals(0, articleRepository.count());
@@ -73,7 +74,7 @@ public class ArticleControllerTest {
                 Map<String, String> params = validParams();
                 params.put("body", "a".repeat(101));
                 //when
-                ResultActions response = post("/articles", params);
+                ResultActions response = http.post(mockMvc, "/articles", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("error"));
                 assertEquals(0, articleRepository.count());
@@ -88,7 +89,7 @@ public class ArticleControllerTest {
             //given
             articleRepository.save(new Article("I love beer.", "It's great."));
             //when
-            ResultActions response = get("/articles");
+            ResultActions response = http.get(mockMvc, "/articles");
             //then
             response.andExpect(jsonPath("$.[0].title").value("I love beer."));
             response.andExpect(jsonPath("$.[0].body").value("It's great."));
@@ -102,22 +103,5 @@ public class ArticleControllerTest {
         }};
         return params;
     }
-
-    private ResultActions get(String url) throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(url)).andDo(print());
-        resultActions.andExpect(status().isOk());
-        return resultActions;
-    }
-
-    private ResultActions post(String url, Map<String, String> params) throws Exception {
-        var objectMapper = new ObjectMapper();
-        ResultActions perform = this.mockMvc.perform(
-                MockMvcRequestBuilders.post(url)
-                        .content(objectMapper.writeValueAsString(params))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE));
-        perform.andExpect(status().isOk());
-        return perform;
-    }
-
 
 }

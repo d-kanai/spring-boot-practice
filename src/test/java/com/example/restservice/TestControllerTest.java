@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.example.restservice.MockMvcWrapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -26,6 +27,7 @@ public class TestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    private MockMvcWrapper http = new MockMvcWrapper();
 
     @Autowired
     DoDRepository doDRepository;
@@ -44,7 +46,7 @@ public class TestControllerTest {
                 //given
                 Map<String, String> params = validParams();
                 //when
-                ResultActions response = post("/test/dod", params);
+                ResultActions response = http.post(mockMvc, "/test/dod", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("success"));
                 assertEquals(1, doDRepository.count());
@@ -59,21 +61,6 @@ public class TestControllerTest {
         }
     }
 
-    private ResultActions get(String url) throws Exception {
-        ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get(url)).andDo(print());
-        resultActions.andExpect(status().isOk());
-        return resultActions;
-    }
-
-    private ResultActions post(String url, Map<String, String> params) throws Exception {
-        var objectMapper = new ObjectMapper();
-        ResultActions perform = this.mockMvc.perform(
-                MockMvcRequestBuilders.post(url)
-                        .content(objectMapper.writeValueAsString(params))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE));
-        perform.andExpect(status().isOk());
-        return perform;
-    }
 
 
 }
