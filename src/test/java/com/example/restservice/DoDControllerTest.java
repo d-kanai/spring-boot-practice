@@ -44,4 +44,18 @@ public class DoDControllerTest {
         }
     }
 
+    @Nested
+    class CreateApi {
+        @Test
+        public void success() throws Exception {
+            //given
+            HashMap params = new HashMap() {{
+                put("name", "Long Method");
+            }};
+            //when
+            ResultActions response = http.post(mockMvc, "/dods", params);
+            //then
+            response.andExpect(jsonPath("$.name").value("Long Method"));
+        }
+    }
 }

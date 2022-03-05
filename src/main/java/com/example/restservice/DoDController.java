@@ -17,4 +17,12 @@ public class DoDController {
         return dodRepository.findAll();
     }
 
+    @CrossOrigin(origins = {"*"})
+    @PostMapping("/dods")
+    public DoD create(@RequestBody DoD params) {
+        DoD dod = dodRepository.save(params);
+        return dod;
+    }
+
+
 }
