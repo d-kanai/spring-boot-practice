@@ -1,0 +1,29 @@
+package com.example.restservice.dodRecord;
+
+import javax.persistence.*;
+
+//@IMPROVE: use DB Migration tool
+@Entity
+// create table dod_records (id bigint auto_increment, dod_id bigint, date datetime not null, value varchar(255) not null, comment varchar(255), primary key (id), foreign key (dod_id) references dods(id) on delete cascade);
+@Table(name = "dod_records")
+
+public class DoDRecord {
+    @Column(nullable = false)
+    public String date;
+
+    @Column(nullable = false)
+    public String value;
+
+    @Column()
+    public String comment;
+
+    @Column()
+    public int dodId;
+
+    public DoDRecord() {
+    }
+
+    @Id
+    @GeneratedValue
+    private int id;
+}
