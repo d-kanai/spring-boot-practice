@@ -1,5 +1,7 @@
 package com.example.restservice.dod;
 
+import com.example.restservice.dodRecord.DoDRecordRepository;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +15,10 @@ public class DoDController {
 
     @CrossOrigin(origins = {"*"})
     @GetMapping("/dods")
-    public List<DoD> findAll() {
-        return dodRepository.findAll();
+    public DoDListResponse findAll() {
+        List<DoD> dodList = dodRepository.findAll();
+        DoDListResponse dodListResponse = new DoDListResponse(dodList);
+        return dodListResponse;
     }
 
     @CrossOrigin(origins = {"*"})
@@ -25,4 +29,12 @@ public class DoDController {
     }
 
 
+    private class DoDListResponse {
+        @JsonProperty("items")
+        private List<DoD> dodList;
+
+        public DoDListResponse(List<DoD> dodList) {
+            this.dodList = dodList;
+        }
+    }
 }

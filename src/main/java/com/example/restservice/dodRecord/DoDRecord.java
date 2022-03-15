@@ -12,7 +12,7 @@ public class DoDRecord {
     public String date;
 
     @Column(nullable = false)
-    public String value;
+    public int value;
 
     @Column()
     public String comment;
@@ -26,4 +26,11 @@ public class DoDRecord {
     @Id
     @GeneratedValue
     private int id;
+
+    public DoDRecord(int dodId, String date, int value, String comment) {
+        this.dodId = dodId;
+        this.date = date;
+        this.value = value;
+        this.comment = comment;
+    }
 }

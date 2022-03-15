@@ -3,6 +3,8 @@ package com.example.restservice.dod;
 import com.example.restservice.MockMvcWrapper;
 import com.example.restservice.dod.DoD;
 import com.example.restservice.dod.DoDRepository;
+import com.example.restservice.dodRecord.DoDRecord;
+import com.example.restservice.dodRecord.DoDRecordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,8 @@ public class DoDControllerTest {
 
     @Autowired
     DoDRepository dodRepository;
+    @Autowired
+    DoDRecordRepository dodRecordRepository;
 
     @BeforeEach
     private void setup() {
@@ -39,11 +43,13 @@ public class DoDControllerTest {
         public void success() throws Exception {
             //given
             //@IMPROVE: extract to DataBuilder
-            dodRepository.save(new DoD("Long Method"));
+            DoD dod = dodRepository.save(new DoD("Long Method"));
+            dodRecordRepository.save(new DoDRecord(dod.getId(), "2020-01-01", 100, "new feature"));
             //when
             ResultActions response = http.get(mockMvc, "/dods");
             //then
             response.andExpect(jsonPath("$.[0].name").value("Long Method"));
+            response.andExpect(jsonPath("$.[0].data.[0].date").value("2020-01-01"));
         }
     }
 
