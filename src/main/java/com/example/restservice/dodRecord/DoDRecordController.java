@@ -15,8 +15,8 @@ public class DoDRecordController {
 
     @CrossOrigin(origins = {"*"})
     @GetMapping("/dods/{dodId}/records")
-    public DoDRecordListResponse list(@PathVariable String dodId) {
-        List<DoDRecord> dodRecord = dodRecordRepository.findAll();
+    public DoDRecordListResponse list(@PathVariable int dodId) {
+        List<DoDRecord> dodRecord = dodRecordRepository.findByDodId(dodId);
         return new DoDRecordListResponse(dodRecord);
     }
     @CrossOrigin(origins = {"*"})

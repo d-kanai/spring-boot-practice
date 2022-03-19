@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
@@ -47,10 +48,10 @@ public class DoDRecordControllerTest {
             //when
             ResultActions response = http.post(mockMvc, "/dodRecords", params);
             //then
-            response.andExpect(jsonPath("$.dodId").value(dod.getId()));
-            response.andExpect(jsonPath("$.date").value("2020-01-01"));
-            response.andExpect(jsonPath("$.value").value("30"));
-            response.andExpect(jsonPath("$.comment").value("Add new feature"));
+            response.andExpect(jsonPath("$.dodId").value(dod.getId()))
+                    .andExpect(jsonPath("$.date").value("2020-01-01"))
+                    .andExpect(jsonPath("$.value").value("30"))
+                    .andExpect(jsonPath("$.comment").value("Add new feature"));
         }
     }
 
@@ -61,13 +62,16 @@ public class DoDRecordControllerTest {
             //given
             //@IMPROVE: extract to DataBuilder
             DoD dod = dodRepository.save(new DoD("Long Method"));
+            DoD dod2 = dodRepository.save(new DoD("Long Method"));
             dodRecordRepository.save(new DoDRecord(dod.getId(), "2020-01-01", 20, "new feature"));
+            dodRecordRepository.save(new DoDRecord(dod2.getId(), "2020-01-01", 20, "new feature"));
             //when
             ResultActions response = http.get(mockMvc, "/dods/" + dod.getId() + "/records");
             //then
-            response.andExpect(jsonPath("$.items.[0].id").isNotEmpty());
-            response.andExpect(jsonPath("$.items.[0].value").value(20));
-            response.andExpect(jsonPath("$.items.[0].date").value("2020-01-01 00:00:00"));
+            response.andExpect(jsonPath("$.items", hasSize(1)))
+                    .andExpect(jsonPath("$.items.[0].id").isNotEmpty())
+                    .andExpect(jsonPath("$.items.[0].value").value(20))
+                    .andExpect(jsonPath("$.items.[0].date").value("2020-01-01 00:00:00"));
         }
     }
 }
