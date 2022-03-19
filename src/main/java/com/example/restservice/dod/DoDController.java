@@ -17,8 +17,7 @@ public class DoDController {
     @GetMapping("/dods")
     public DoDListResponse findAll() {
         List<DoD> dodList = dodRepository.findAll();
-        DoDListResponse dodListResponse = new DoDListResponse(dodList);
-        return dodListResponse;
+        return new DoDListResponse(dodList);
     }
 
     @CrossOrigin(origins = {"*"})

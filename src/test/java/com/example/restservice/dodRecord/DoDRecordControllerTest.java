@@ -24,6 +24,8 @@ public class DoDRecordControllerTest {
     private MockMvcWrapper http = new MockMvcWrapper();
     @Autowired
     DoDRepository dodRepository;
+    @Autowired
+    DoDRecordRepository dodRecordRepository;
 
     @BeforeEach
     private void setup() {
@@ -49,6 +51,23 @@ public class DoDRecordControllerTest {
             response.andExpect(jsonPath("$.date").value("2020-01-01"));
             response.andExpect(jsonPath("$.value").value("30"));
             response.andExpect(jsonPath("$.comment").value("Add new feature"));
+        }
+    }
+
+    @Nested
+    class ListApi {
+        @Test
+        public void success() throws Exception {
+            //given
+            //@IMPROVE: extract to DataBuilder
+            DoD dod = dodRepository.save(new DoD("Long Method"));
+            dodRecordRepository.save(new DoDRecord(dod.getId(), "2020-01-01", 20, "new feature"));
+            //when
+            ResultActions response = http.get(mockMvc, "/dods/" + dod.getId() + "/records");
+            //then
+            response.andExpect(jsonPath("$.items.[0].id").isNotEmpty());
+            response.andExpect(jsonPath("$.items.[0].value").value(20));
+            response.andExpect(jsonPath("$.items.[0].date").value("2020-01-01 00:00:00"));
         }
     }
 }

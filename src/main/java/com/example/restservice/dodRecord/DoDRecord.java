@@ -25,7 +25,7 @@ public class DoDRecord {
 
     @Id
     @GeneratedValue
-    private int id;
+    public int id;
 
     public DoDRecord(int dodId, String date, int value, String comment) {
         this.dodId = dodId;
