@@ -1,7 +1,7 @@
 package com.example.restservice.test;
 
 import com.example.restservice.MockMvcWrapper;
-import com.example.restservice.dod.DoDRepository;
+import com.example.restservice.dod.repository.IDoDJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
@@ -27,11 +26,11 @@ public class TestControllerTest {
     private MockMvcWrapper http = new MockMvcWrapper();
 
     @Autowired
-    DoDRepository doDRepository;
+    IDoDJpaRepository dodRepository;
 
     @BeforeEach
     private void setup() {
-        doDRepository.deleteAll();
+        dodRepository.deleteAll();
     }
 
     @Nested
@@ -46,7 +45,7 @@ public class TestControllerTest {
                 ResultActions response = http.post(mockMvc, "/test/dod", params);
                 //then
                 response.andExpect(jsonPath("$.status").value("success"));
-                assertEquals(1, doDRepository.count());
+                assertEquals(1, dodRepository.count());
             }
         }
 
@@ -57,7 +56,6 @@ public class TestControllerTest {
             return params;
         }
     }
-
 
 
 }
