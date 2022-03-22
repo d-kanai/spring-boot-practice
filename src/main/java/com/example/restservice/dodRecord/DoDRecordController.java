@@ -1,6 +1,5 @@
 package com.example.restservice.dodRecord;
 
-import com.example.restservice.dod.DoD;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +10,7 @@ import java.util.List;
 public class DoDRecordController {
 
     @Autowired
-    DoDRecordRepository dodRecordRepository;
+    DoDRecordJpaRepository dodRecordRepository;
 
     @CrossOrigin(origins = {"*"})
     @GetMapping("/dods/{dodId}/records")

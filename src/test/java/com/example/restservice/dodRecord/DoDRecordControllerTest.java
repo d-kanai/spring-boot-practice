@@ -1,8 +1,8 @@
 package com.example.restservice.dodRecord;
 
 import com.example.restservice.MockMvcWrapper;
-import com.example.restservice.dod.DoD;
-import com.example.restservice.dod.repository.IDoDJpaRepository;
+import com.example.restservice.dod.infra.DoD;
+import com.example.restservice.dod.infra.DoDJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,9 @@ public class DoDRecordControllerTest {
     private MockMvc mockMvc;
     private MockMvcWrapper http = new MockMvcWrapper();
     @Autowired
-    IDoDJpaRepository dodRepository;
+    DoDJpaRepository dodRepository;
     @Autowired
-    DoDRecordRepository dodRecordRepository;
+    DoDRecordJpaRepository dodRecordRepository;
 
     @BeforeEach
     private void setup() {

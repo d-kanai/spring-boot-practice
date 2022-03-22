@@ -1,4 +1,4 @@
-package com.example.restservice.dod;
+package com.example.restservice.dod.infra;
 
 import com.example.restservice.dodRecord.DoDRecord;
 import com.fasterxml.jackson.annotation.JsonProperty;

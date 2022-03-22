@@ -1,8 +1,8 @@
 package com.example.restservice.test;
 
 import com.example.restservice.shared.Response;
-import com.example.restservice.dod.DoD;
-import com.example.restservice.dod.repository.IDoDJpaRepository;
+import com.example.restservice.dod.infra.DoD;
+import com.example.restservice.dod.infra.DoDJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @Autowired
-    IDoDJpaRepository dodRepository;
+    DoDJpaRepository dodRepository;
 
     //@IMPROVE: set CORS by config
     @CrossOrigin(origins = {"*"})
