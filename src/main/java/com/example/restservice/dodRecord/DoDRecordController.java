@@ -15,21 +15,21 @@ public class DoDRecordController {
     @CrossOrigin(origins = {"*"})
     @GetMapping("/dods/{dodId}/records")
     public DoDRecordListResponse list(@PathVariable int dodId) {
-        List<DoDRecord> dodRecord = dodRecordRepository.findByDodId(dodId);
+        List<DoDRecordEntity> dodRecord = dodRecordRepository.findByDodId(dodId);
         return new DoDRecordListResponse(dodRecord);
     }
     @CrossOrigin(origins = {"*"})
     @PostMapping("/dodRecords")
-    public DoDRecord create(@RequestBody DoDRecord params) {
-        DoDRecord dodRecord = dodRecordRepository.save(params);
-        return dodRecord;
+    public DoDRecordEntity create(@RequestBody DoDRecordEntity params) {
+        DoDRecordEntity dodRecordEntity = dodRecordRepository.save(params);
+        return dodRecordEntity;
     }
 
     private class DoDRecordListResponse {
         @JsonProperty("items")
-        private List<DoDRecord> dodRecordList;
+        private List<DoDRecordEntity> dodRecordList;
 
-        public DoDRecordListResponse(List<DoDRecord> dodRecordList) {
+        public DoDRecordListResponse(List<DoDRecordEntity> dodRecordList) {
             this.dodRecordList = dodRecordList;
         }
     }

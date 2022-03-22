@@ -1,6 +1,6 @@
 package com.example.restservice.dod.infra;
 
-import com.example.restservice.dodRecord.DoDRecord;
+import com.example.restservice.dodRecord.DoDRecordEntity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -10,35 +10,25 @@ import java.util.List;
 @Entity
 // create table dods (id bigint auto_increment, name varchar(255) not null, primary key (id));
 @Table(name = "dods")
-public class DoD {
-
-    public DoD() {
-    }
-
-    @Transient
-    @JsonProperty("data")
-    private List<DoDRecord> dodRecords;
-
-    public DoD(String name) {
-        this.name = name;
-    }
-
+public class DoDEntity {
     @Id
     @GeneratedValue
     public int id;
-
     @Column(nullable = false)
     private String name;
 
-    public String getName() {
-        return name;
+    public DoDEntity() {
+    }
+
+    public DoDEntity(String name) {
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setDoDRecords(List<DoDRecord> dodRecords) {
-        this.dodRecords = dodRecords;
+    public String getName() {
+        return name;
     }
 }

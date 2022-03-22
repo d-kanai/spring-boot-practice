@@ -1,9 +1,9 @@
 package com.example.restservice.dod;
 
 import com.example.restservice.MockMvcWrapper;
-import com.example.restservice.dod.infra.DoD;
+import com.example.restservice.dod.infra.DoDEntity;
 import com.example.restservice.dod.infra.DoDJpaRepository;
-import com.example.restservice.dodRecord.DoDRecord;
+import com.example.restservice.dodRecord.DoDRecordEntity;
 import com.example.restservice.dodRecord.DoDRecordJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -43,8 +43,8 @@ public class DoDControllerTest {
         public void success() throws Exception {
             //given
             //@IMPROVE: extract to DataBuilder
-            DoD dod = dodRepository.save(new DoD("Long Method"));
-            dodRecordRepository.save(new DoDRecord(dod.getId(), "2020-01-01", 100, "new feature"));
+            DoDEntity dod = dodRepository.save(new DoDEntity("Long Method"));
+            dodRecordRepository.save(new DoDRecordEntity(dod.getId(), "2020-01-01", 100, "new feature"));
             //when
             ResultActions response = http.get(mockMvc, "/dods");
             //then

@@ -1,7 +1,7 @@
 package com.example.restservice.dodRecord;
 
 import com.example.restservice.MockMvcWrapper;
-import com.example.restservice.dod.infra.DoD;
+import com.example.restservice.dod.infra.DoDEntity;
 import com.example.restservice.dod.infra.DoDJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
@@ -38,7 +38,7 @@ public class DoDRecordControllerTest {
         @Test
         public void success() throws Exception {
             //given
-            DoD dod = dodRepository.save(new DoD("Long Method"));
+            DoDEntity dod = dodRepository.save(new DoDEntity("Long Method"));
             HashMap params = new HashMap() {{
                 put("dodId", dod.getId());
                 put("date", "2020-01-01");
@@ -61,10 +61,10 @@ public class DoDRecordControllerTest {
         public void success() throws Exception {
             //given
             //@IMPROVE: extract to DataBuilder
-            DoD dod = dodRepository.save(new DoD("Long Method"));
-            DoD dod2 = dodRepository.save(new DoD("Long Method"));
-            dodRecordRepository.save(new DoDRecord(dod.getId(), "2020-01-01", 20, "new feature"));
-            dodRecordRepository.save(new DoDRecord(dod2.getId(), "2020-01-01", 20, "new feature"));
+            DoDEntity dod = dodRepository.save(new DoDEntity("Long Method"));
+            DoDEntity dod2 = dodRepository.save(new DoDEntity("Long Method"));
+            dodRecordRepository.save(new DoDRecordEntity(dod.getId(), "2020-01-01", 20, "new feature"));
+            dodRecordRepository.save(new DoDRecordEntity(dod2.getId(), "2020-01-01", 20, "new feature"));
             //when
             ResultActions response = http.get(mockMvc, "/dods/" + dod.getId() + "/records");
             //then

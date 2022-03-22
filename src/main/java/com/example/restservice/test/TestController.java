@@ -1,7 +1,7 @@
 package com.example.restservice.test;
 
 import com.example.restservice.shared.Response;
-import com.example.restservice.dod.infra.DoD;
+import com.example.restservice.dod.infra.DoDEntity;
 import com.example.restservice.dod.infra.DoDJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,7 +28,7 @@ public class TestController {
 
     @CrossOrigin(origins = {"*"})
     @PostMapping("/test/dod")
-    public Response createDoD(@RequestBody DoD dod) {
+    public Response createDoD(@RequestBody DoDEntity dod) {
         dodRepository.save(dod);
         return new Response("success");
     }

@@ -1,36 +1,35 @@
 package com.example.restservice.dodRecord;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-//@IMPROVE: use DB Migration tool
-@Entity
-// create table dod_records (id bigint auto_increment, dod_id bigint, date datetime not null, value varchar(255) not null, comment varchar(255), primary key (id), foreign key (dod_id) references dods(id) on delete cascade);
-@Table(name = "dod_records")
-
+@JsonSerialize
 public class DoDRecord {
-    @Column(nullable = false)
-    public String date;
 
-    @Column(nullable = false)
-    public int value;
+    private final int id;
+    private final String date;
+    private final int value;
+    private final String comment;
 
-    @Column()
-    public String comment;
-
-    @Column()
-    public int dodId;
-
-    public DoDRecord() {
-    }
-
-    @Id
-    @GeneratedValue
-    public int id;
-
-    public DoDRecord(int dodId, String date, int value, String comment) {
-        this.dodId = dodId;
+    public DoDRecord(int id, String date, int value, String comment) {
+        this.id = id;
         this.date = date;
         this.value = value;
         this.comment = comment;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public String getComment() {
+        return comment;
     }
 }
