@@ -1,6 +1,6 @@
 package com.example.restservice.dod.domain;
 
-import com.example.restservice.dodRecord.DoDRecord;
+import com.example.restservice.dodRecord.domain.DoDRecord;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

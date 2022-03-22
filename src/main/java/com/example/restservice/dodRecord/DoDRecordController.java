@@ -1,5 +1,7 @@
 package com.example.restservice.dodRecord;
 
+import com.example.restservice.dodRecord.domain.DoDRecord;
+import com.example.restservice.dodRecord.domain.repository.IDoDRecordRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,26 +12,27 @@ import java.util.List;
 public class DoDRecordController {
 
     @Autowired
-    DoDRecordJpaRepository dodRecordRepository;
+    IDoDRecordRepository dodRecordRepository;
 
     @CrossOrigin(origins = {"*"})
     @GetMapping("/dods/{dodId}/records")
     public DoDRecordListResponse list(@PathVariable int dodId) {
-        List<DoDRecordEntity> dodRecord = dodRecordRepository.findByDodId(dodId);
+        List<DoDRecord> dodRecord = dodRecordRepository.findByDodId(dodId);
         return new DoDRecordListResponse(dodRecord);
     }
+
     @CrossOrigin(origins = {"*"})
     @PostMapping("/dodRecords")
-    public DoDRecordEntity create(@RequestBody DoDRecordEntity params) {
-        DoDRecordEntity dodRecordEntity = dodRecordRepository.save(params);
-        return dodRecordEntity;
+    public DoDRecord create(@RequestBody DoDRecord params) {
+        DoDRecord dodRecord = dodRecordRepository.create(params);
+        return dodRecord;
     }
 
     private class DoDRecordListResponse {
         @JsonProperty("items")
-        private List<DoDRecordEntity> dodRecordList;
+        private List<DoDRecord> dodRecordList;
 
-        public DoDRecordListResponse(List<DoDRecordEntity> dodRecordList) {
+        public DoDRecordListResponse(List<DoDRecord> dodRecordList) {
             this.dodRecordList = dodRecordList;
         }
     }

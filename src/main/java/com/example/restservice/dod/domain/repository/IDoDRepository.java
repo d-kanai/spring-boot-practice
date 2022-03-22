@@ -8,4 +8,5 @@ public interface IDoDRepository {
 
     List<DoD> findAllWithDoDRecord();
 
+    DoD create(DoD dod);
 }

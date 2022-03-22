@@ -1,8 +1,7 @@
 package com.example.restservice.dod;
 
 import com.example.restservice.dod.domain.DoD;
-import com.example.restservice.dod.infra.DoDEntity;
-import com.example.restservice.dod.infra.DoDRepository;
+import com.example.restservice.dod.domain.repository.IDoDRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ import java.util.List;
 public class DoDController {
 
     @Autowired
-    DoDRepository dodRepository;
+    IDoDRepository dodRepository;
 
     @CrossOrigin(origins = {"*"})
     @GetMapping("/dods")
@@ -23,8 +22,8 @@ public class DoDController {
 
     @CrossOrigin(origins = {"*"})
     @PostMapping("/dods")
-    public DoDEntity create(@RequestBody DoDEntity params) {
-        DoDEntity dod = dodRepository.save(params);
+    public DoD create(@RequestBody DoD params) {
+        DoD dod = dodRepository.create(params);
         return dod;
     }
 

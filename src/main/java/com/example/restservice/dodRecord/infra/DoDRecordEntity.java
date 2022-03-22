@@ -1,4 +1,4 @@
-package com.example.restservice.dodRecord;
+package com.example.restservice.dodRecord.infra;
 
 import javax.persistence.*;
 

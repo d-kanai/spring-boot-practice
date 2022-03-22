@@ -1,4 +1,4 @@
-package com.example.restservice.dodRecord;
+package com.example.restservice.dodRecord.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -9,12 +9,14 @@ public class DoDRecord {
     private final String date;
     private final int value;
     private final String comment;
+    private int dodId;
 
-    public DoDRecord(int id, String date, int value, String comment) {
+    public DoDRecord(int id, String date, int value, String comment, int dodId) {
         this.id = id;
         this.date = date;
         this.value = value;
         this.comment = comment;
+        this.dodId = dodId;
     }
 
     public int getId() {
@@ -31,5 +33,9 @@ public class DoDRecord {
 
     public String getComment() {
         return comment;
+    }
+
+    public int getDodId() {
+        return dodId;
     }
 }

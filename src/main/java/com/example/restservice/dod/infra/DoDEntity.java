@@ -1,10 +1,6 @@
 package com.example.restservice.dod.infra;
 
-import com.example.restservice.dodRecord.DoDRecordEntity;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
-import java.util.List;
 
 //@IMPROVE: use DB Migration tool
 @Entity
