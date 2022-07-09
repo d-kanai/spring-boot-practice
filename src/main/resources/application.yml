@@ -1,17 +1,8 @@
 spring:
-  datasource:
-    sqlScriptEncoding: UTF-8
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/spring_development?useSSL=false&requireSSL=false
-    username: root
-    password:
-  jpa:
-    hibernate:
-      use-new-id-generator-mappings: false
 logging:
   level:
     #@IMPROVE Show better AccessLog
     sql: debug
-    root: debug
+    root: info
 server:
   port: 9000
