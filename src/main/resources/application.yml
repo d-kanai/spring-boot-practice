@@ -1,7 +1,6 @@
 spring:
 logging:
   level:
-    #@IMPROVE Show better AccessLog
     sql: debug
     root: info
 server:
